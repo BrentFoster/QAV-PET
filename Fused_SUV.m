@@ -22,7 +22,7 @@ function varargout = Fused_SUV(varargin)
 
 % Edit the above text to modify the response to help Fused_SUV
 
-% Last Modified by GUIDE v2.5 26-Jun-2018 09:23:52
+% Last Modified by GUIDE v2.5 27-Jun-2018 09:56:21
 
 % Begin initialization code - DO NOT EDIT
 gui_Singleton = 1;
@@ -2044,7 +2044,14 @@ for i = 1:length(NumObjects)
     
     %Get the current X Labels then convert to milimeters using the pixel
     %dimensions obtained from the image header.
-    x = str2num(get(gca,'XTickLabel'));    
+    try
+        x = str2num(get(gca,'XTickLabel'));    
+    catch
+        x_cell = get(gca,'XTickLabel');
+       for j = 1:length( x_cell)
+          x(j) = str2num(x_cell{j});
+       end
+    end
     x = x*prod(handles.PET_pixdim);        
     %Set the bottom index to be 0 for relative distance in mm's
     x = max(x(:)) - x;    
@@ -2053,7 +2060,15 @@ for i = 1:length(NumObjects)
     set(gca,'fontWeight', 'bold', 'XTickLabel',num2str(x));
     
     %Do the same procedure for the Y axis label!
-    y = str2num(get(gca,'YTickLabel'));    
+    try
+        y = str2num(get(gca,'YTickLabel'));    
+    catch
+        y_cell = get(gca,'YTickLabel');
+       for j = 1:length(y_cell)
+          y(j) = str2num(y_cell{j});
+       end
+    end
+    
     y = y*prod(handles.PET_pixdim);      
     %Set the bottom index to be 0 for relative distance in mm's
     y = max(y(:)) - y;    
@@ -2128,8 +2143,17 @@ for i = 1:length(NumObjects)
     y = round(y*100)/100;    
     set(gca,'YTickLabel',num2str(y));
      
-    %Do the same procedure for the Z axis label!
-    z = str2num(get(gca,'ZTickLabel'));    
+    %Do the same procedure for the Z axis label!    
+    try
+        z = str2num(get(gca,'ZTickLabel'));    
+    catch
+        z_cell = get(gca,'ZTickLabel');
+       for j = 1:length(z_cell)
+          z(j) = str2num(z_cell{j});
+       end
+    end
+    
+    
     z = z*prod(handles.PET_pixdim);     
     
     if ~isempty(z)
@@ -3139,4 +3163,3 @@ function varargout = Fused_SUV_OutputFcn(hObject, eventdata, handles)
 
 % Get default command line output from handles structure
 varargout{1} = handles.output;
-
